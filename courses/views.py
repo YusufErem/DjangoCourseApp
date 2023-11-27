@@ -2,11 +2,12 @@ from datetime import date, datetime
 from django.shortcuts import redirect, render
 from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect
 from django.urls import reverse
-
+from .models import Course, Category
 data = {
     "programlama":"programlama kategorisine ait kurslar",
     "web-gelistirme":"web gelistirme kategorisine ait kurslar",
-    "mobil":"mobil kategorisine ait kurslar",
+    "mobil-gelistirme":"mobil Programlama kategorisine ait kurslar"
+    
 }
 
 db = {
@@ -48,14 +49,9 @@ db = {
 }
 
 def index(request):
-    kurslar=[]
-    kategoriler = db["categories"]
+    kurslar= Course.objects.filter(isActive=1)
+    kategoriler = Category.objects.all()
     
-    
-    for kurs in db["courses"]:
-        if kurs["isActive"]== True:
-            kurslar.append(kurs)
-
     return render(request, 'courses/index.html', {
         'categories': kategoriler,
         'courses': kurslar
